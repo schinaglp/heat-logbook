@@ -1,0 +1,28 @@
+	Neue Temperatur hinzufügen
+
+https://heartylaborer.backendless.app/api/data/temperatures
+
+
+{
+	"feedback": "cold",
+	"temp": 0.2
+}
+
+
+	Driver zur Temperatur hinzufügen (in URL die tempID | in json die driverID)
+
+
+https://heartylaborer.backendless.app/api/data/temperatures/E3CBD29F-F1DA-4544-89CE-51221FA5CD67/driver
+
+
+[
+	"62FF3D57-723A-4B1B-852F-795D8D82A776"
+]
+
+
+
+
+
+https://heartylaborer.backendless.app/api/data/temperatures/?where=driver%20%3D%20%27ooooooooo%27"
+
+https://heartylaborer.backendless.app/api/data/temperatures/?where=temp%3D0.2

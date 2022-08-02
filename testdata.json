@@ -1,0 +1,56 @@
+{
+    "drivers": [
+      {
+        "_id": "62d85fc216739e992b0f7b0c",
+        "email": "tina.armstrong@example.com",
+        "hash": "84rjyvfchj"
+      },
+      {
+        "_id": "62d85fe88d0086e33f571553",
+        "email": "carl.robinson@example.com",
+        "hash": "4pb2uudj8h"
+      },
+      {
+        "_id": "62d8600354ea7f6bd606be17",
+        "email": "gina.gibson@example.com",
+        "hash": "52tng34adb"
+      }
+    ],
+    "temperatures": [
+      {
+        "_id": "9564116f-c52e-4e00-993d-0eaa1e377e15",
+        "date": "1657882510",
+        "driver_id": "62d85fc216739e992b0f7b0c",
+        "feedback": "1",
+        "temp": "23.4"
+      },
+      {
+        "_id": "f4d5b670-6a48-47e1-9057-cbad1e2ceb92",
+        "date": "1657973203",
+        "driver_id": "62d85fc216739e992b0f7b0c",
+        "feedback": "2",
+        "temp": "29.1"
+      },
+      {
+        "_id": "6f3858d7-f084-4525-9802-bc92d8e04e95",
+        "date": "1658049668",
+        "driver_id": "62d85fe88d0086e33f571553",
+        "feedback": "2",
+        "temp": "31.7"
+      },
+      {
+        "_id": "595fa23d-5758-437c-9949-5520c87a9f77",
+        "date": "1654931657",
+        "driver_id": "62d8600354ea7f6bd606be17",
+        "feedback": "0",
+        "temp": "18.7"
+      },
+      {
+        "_id": "eafde11b-6589-4666-8fb3-c307cbf589ac",
+        "date": "1655639756",
+        "driver_id": "62d85fe88d0086e33f571553",
+        "feedback": "1",
+        "temp": "22.4"
+      }
+    ]
+}
