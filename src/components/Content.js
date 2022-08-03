@@ -6,29 +6,33 @@ import EntryHeader from './EntryHeader';
 import EntryFooter from './EntryFooter';
 import Error from './Error';
 import AddEntry from './AddEntry';
+import Login from './Login';
 import { useState } from 'react';
 import { FiMenu } from 'react-icons/fi'
 import { initializeApp } from "firebase/app";
-import { getDatabase, onValue, ref, query, limitToLast, orderByChild, set, remove } from "firebase/database"
+import { getDatabase, onValue, ref, query, limitToLast, orderByChild, set, remove, equalTo, endBefore } from "firebase/database"
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
 
 const Content = ({ apiKeys }) => {
+
+    const [entryHeader] = useState(["Letzte Einträge", `Alle Einträge ${new Date().getFullYear()}`])
+    const [headerCount, setHeaderCount] = useState(0);
+    const [currentUser, setCurrentUser] = useState('');
+    const [showAdd, setShowAdd] = useState(false);
+    const [tempList, setTempList] = useState([]);
+    const [showAll, setShowAll] = useState(false);
+    const [testUser] = useState('3bbcad25-c0e0-4a4d-979c-eab6ffaa7d32');
 
     useEffect(() => {
         fetchData();
 
         function fetchData() {
-            readLatestTemps(currentUser, !showAll);
+            if(currentUser && currentUser.length > 0)
+                readLatestTemps(currentUser, !showAll);
         }
-    }, []);
+    }, [currentUser]);
 
-    const [entryHeader, setEntryHeader] = useState(["Letzte Einträge", `Alle Einträge ${new Date().getFullYear()}`])
-    const [headerCount, setHeaderCount] = useState(0);
-    const [currentUser, setCurrentUser] = useState("c860d359-f598-4cee-8025-cc4510267854");
-    // const [currentUser, setCurrentUser] = useState("123");
-    const [showAdd, setShowAdd] = useState(false);
-    const [tempList, setTempList] = useState([]);
-    const [showAll, setShowAll] = useState(false);
 
     const firebaseConfig = {
         apiKey: apiKeys.firebaseApiKey,
@@ -66,15 +70,27 @@ const Content = ({ apiKeys }) => {
         });
     };
     
-    const readDriver = (driverId) => {
+    const readDriver = (email, password) => {
         const db = getDatabase();
-        const reference = ref(db, `drivers/${driverId}`);
+        const reference = query(ref(db, `drivers`), orderByChild('email'), equalTo(email));
         onValue(reference, (snapshot) => {
             const data = snapshot.val();
+            let userList = [];
             if(data === null)
-                console.log(`Keinen Eintrag mit der ID ${driverId} gefunden.`);
+                console.log(`Keinen Eintrag mit der E-Mail Adresse ${email} gefunden.`);
             else {
-                console.log(data);
+                snapshot.forEach((child) => {
+                    userList.push(child.val());
+                });
+                if(userList.length > 1)
+                    console.log('UserID nicht eindeutig!');
+                else {
+                    bcrypt.compare(password, userList[0].hash, function(err, result) {
+                        if (result) {
+                            setCurrentUser(userList[0]._id);
+                       }
+                    });
+                }
             }
         });
     };
@@ -84,6 +100,11 @@ const Content = ({ apiKeys }) => {
         let reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'));
         if(withLimit)
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), limitToLast(3));
+        if(driverId === testUser && withLimit) 
+            reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400), limitToLast(3));
+        else if(driverId === testUser)
+            reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400));
+
         onValue(reference, (snapshot) => {
             const data = snapshot.val();
             let newTempList = [];
@@ -111,8 +132,13 @@ const Content = ({ apiKeys }) => {
         entry.date = (new Date().getTime())/1000;
 
         const newEntry = { _id, ...entry };
-        writeTemp(currentUser, newEntry);
-        readLatestTemps(currentUser, !showAll);
+        if(currentUser !== testUser) {
+            writeTemp(currentUser, newEntry);
+            readLatestTemps(currentUser, !showAll);
+        }
+        else {
+            setTempList([newEntry, ...tempList]);
+        }
     }
 
     const toggleAdd = () => {
@@ -151,7 +177,10 @@ const Content = ({ apiKeys }) => {
         if(tempList.length < 1)
             return false;
         else if(checkEntryToday(tempList[0])) {
-            removeTemp(currentUser, tempList[0]._id);
+            if(currentUser !== testUser)
+                removeTemp(currentUser, tempList[0]._id);
+            else
+                setTempList(tempList.slice(1));
             return true;
         }
         else {
@@ -159,18 +188,35 @@ const Content = ({ apiKeys }) => {
         }
     }
 
+    const login = (email, password) => {
+        readDriver(email, password);
+    };
+
+    const getTestUser = () => {
+        setCurrentUser(testUser);
+    };
+
     return (
-        <div className='content-box'>
-            <div className='upper-class'>
-                <Header title='Hitze Lokbuch' icon={<FiMenu />} />  
-                <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} />
+        currentUser ?
+            <div className='content-box'>
+                <div className='upper-class'>
+                    <Header icon={<FiMenu />} />  
+                    <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} />
+                </div>
+                <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
+                { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
+                <Entries entries={tempList} />
+                <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
+                <Error />
             </div>
-            <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
-            { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
-            <Entries entries={tempList} />
-            <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
-            <Error />
-        </div>
+        :
+            <div className='content-box'>
+                <div style={{paddingBottom: '0.5em'}} className='upper-class'>
+                    <Header />
+                </div>
+                <Login onLogin={login} onTest={getTestUser} />
+                <Error />
+            </div>
     );
 }
 

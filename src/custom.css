@@ -293,6 +293,57 @@ body {
   height: 0;
 }
 
+.login-header {
+  color: #EC8656;
+  margin: 1em 0em 0.5em 1em;
+}
+
+.login-form {
+  margin: 0em 1.5em;
+}
+
+.login-input {
+  margin: 1em 0.6em;
+}
+
+.login-label {
+  color: #3c7272;
+  font-weight: 700;
+}
+
+#login-email, #login-password {
+  width: 100%;
+  margin-bottom: 1em;
+  margin-top: 0.5em;
+  height: 2.5em;
+  padding: 0em 0.5em;
+}
+
+.register-link-message {
+  color: #3c7272;
+  font-weight: 700;
+  margin-left: 2.7em;
+  margin-bottom: 0.2em;
+  font-size: 3.5vw;
+  height: 2em;
+  display: flex;
+}
+
+.register-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.login-icon {
+  font-size: 7vw;
+}
+
+.register-text {
+  align-self: flex-end;
+  height: 1.5em;
+  margin-left: 0.5em;
+}
+
 
 
 
@@ -342,5 +393,13 @@ body {
 
   .month-name {
     font-size: 1.6em;
+  }
+
+  .register-link-message {
+    font-size: 1em;
+  }
+
+  .login-icon {
+    font-size: 2em;
   }
 }

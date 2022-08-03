@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = ({ title, icon }) => {
+const Header = ({ icon }) => {
     return (
         <div className='flexbox'> 
             <h1 className='header'><span style={{color:'#EC8656'}}>Hitze</span> Logbuch</h1>
