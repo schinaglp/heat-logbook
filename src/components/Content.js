@@ -7,8 +7,10 @@ import EntryFooter from './EntryFooter';
 import Error from './Error';
 import AddEntry from './AddEntry';
 import Login from './Login';
+import Register from './Register';
 import { useState } from 'react';
 import { FiMenu } from 'react-icons/fi'
+import { MdClose } from 'react-icons/md'
 import { initializeApp } from "firebase/app";
 import { getDatabase, onValue, ref, query, limitToLast, orderByChild, set, remove, equalTo, endBefore } from "firebase/database"
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +24,8 @@ const Content = ({ apiKeys }) => {
     const [showAdd, setShowAdd] = useState(false);
     const [tempList, setTempList] = useState([]);
     const [showAll, setShowAll] = useState(false);
+    const [showTestDisclaimer, setShowTestDisclaimer] = useState(true);
+    const [showRegister, setShowRegister] = useState(false);
     const [testUser] = useState('3bbcad25-c0e0-4a4d-979c-eab6ffaa7d32');
 
     useEffect(() => {
@@ -153,6 +157,14 @@ const Content = ({ apiKeys }) => {
         setShowAll(!showAll);
     }
 
+    const toggleTestDisclaimer = () => {
+        setShowTestDisclaimer(!showTestDisclaimer);
+    };
+
+    const toggleRegister = () => {
+        setShowRegister(!showRegister);
+    };
+
     const checkEntryToday = (entry) => {
         if(new Date(entry.date*1000).getDate() === new Date().getDate() && 
            new Date(entry.date*1000).getMonth() === new Date().getMonth() &&
@@ -209,6 +221,13 @@ const Content = ({ apiKeys }) => {
                 { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
                 <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
                 <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
+                {currentUser === testUser && showTestDisclaimer ?
+                    <p className='test-disclaimer'><MdClose className='close-btn' onClick={toggleTestDisclaimer}/>Sie befinden sich in der Testversion der Anwendung. Ihnen werden zufallsgenerierte Testdaten angezeigt. 
+                        Änderungen daran werden nicht gespeichert und verschwinden beim Aktualisieren.</p>
+                 :
+                    <div></div>
+                }
+
                 <Error />
             </div>
         :
@@ -216,7 +235,12 @@ const Content = ({ apiKeys }) => {
                 <div style={{paddingBottom: '0.5em'}} className='upper-class'>
                     <Header />
                 </div>
-                <Login onLogin={login} onTest={getTestUser} />
+                {
+                !showRegister ? 
+                    <Login onLogin={login} onTest={getTestUser} onRegister={toggleRegister} />
+                :
+                    <Register />
+                }
                 <Error />
             </div>
     );
