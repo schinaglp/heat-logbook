@@ -28,8 +28,11 @@ const Content = ({ apiKeys }) => {
         fetchData();
 
         function fetchData() {
-            if(currentUser && currentUser.length > 0)
-                readLatestTemps(currentUser, !showAll);
+            if((currentUser === testUser && tempList.length < 1) ||
+                (currentUser && currentUser.length > 0 && currentUser !== testUser)) {
+                    readLatestTemps(currentUser, !showAll);
+                }
+
         }
     }, [currentUser]);
 
@@ -100,9 +103,7 @@ const Content = ({ apiKeys }) => {
         let reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'));
         if(withLimit)
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), limitToLast(3));
-        if(driverId === testUser && withLimit) 
-            reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400), limitToLast(3));
-        else if(driverId === testUser)
+        if(driverId === testUser) {}
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400));
 
         onValue(reference, (snapshot) => {
@@ -147,7 +148,8 @@ const Content = ({ apiKeys }) => {
 
     const toggleAll = () => {
         setHeaderCount(headerCount + 1);
-        readLatestTemps(currentUser, showAll);
+        if(currentUser !== testUser)
+            readLatestTemps(currentUser, showAll);
         setShowAll(!showAll);
     }
 
@@ -205,7 +207,7 @@ const Content = ({ apiKeys }) => {
                 </div>
                 <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
                 { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
-                <Entries entries={tempList} />
+                <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
                 <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
                 <Error />
             </div>
