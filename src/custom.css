@@ -311,7 +311,7 @@ body {
   font-weight: 700;
 }
 
-#login-email, #login-password {
+#login-email, #login-password, #login-password-rep {
   width: 100%;
   margin-bottom: 1em;
   margin-top: 0.5em;
@@ -359,6 +359,10 @@ body {
   float: right;
   font-size: 1.5em;
   cursor: pointer;
+}
+
+.login-failed {
+  color: #CC2F05;
 }
 
 

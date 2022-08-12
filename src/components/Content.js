@@ -26,6 +26,7 @@ const Content = ({ apiKeys }) => {
     const [showAll, setShowAll] = useState(false);
     const [showTestDisclaimer, setShowTestDisclaimer] = useState(true);
     const [showRegister, setShowRegister] = useState(false);
+    const [loginFailed, setLoginFailed] = useState(false);
     const [testUser] = useState('3bbcad25-c0e0-4a4d-979c-eab6ffaa7d32');
 
     useEffect(() => {
@@ -84,7 +85,7 @@ const Content = ({ apiKeys }) => {
             const data = snapshot.val();
             let userList = [];
             if(data === null)
-                console.log(`Keinen Eintrag mit der E-Mail Adresse ${email} gefunden.`);
+                setLoginFailed(true);
             else {
                 snapshot.forEach((child) => {
                     userList.push(child.val());
@@ -93,9 +94,10 @@ const Content = ({ apiKeys }) => {
                     console.log('UserID nicht eindeutig!');
                 else {
                     bcrypt.compare(password, userList[0].hash, function(err, result) {
-                        if (result) {
+                        if (result)
                             setCurrentUser(userList[0]._id);
-                       }
+                        else 
+                            setLoginFailed(true);
                     });
                 }
             }
@@ -106,9 +108,15 @@ const Content = ({ apiKeys }) => {
         const db = getDatabase();
         let reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'));
         if(withLimit)
+        {
+            console.log(`withLimit | currentUser = ${currentUser} | testUser = ${testUser}`);
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), limitToLast(3));
-        if(driverId === testUser) {}
+        }
+        if(driverId === testUser)
+        {
+            console.log(`driverId === testUser | currentUser = ${currentUser} | testUser = ${testUser}`);
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400));
+        }
 
         onValue(reference, (snapshot) => {
             const data = snapshot.val();
@@ -210,6 +218,10 @@ const Content = ({ apiKeys }) => {
         setCurrentUser(testUser);
     };
 
+    const register = (email, password) => {
+        console.log(email);
+    };
+
     return (
         currentUser ?
             <div className='content-box'>
@@ -221,7 +233,8 @@ const Content = ({ apiKeys }) => {
                 { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
                 <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
                 <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
-                {currentUser === testUser && showTestDisclaimer ?
+                {
+                currentUser === testUser && showTestDisclaimer ?
                     <p className='test-disclaimer'><MdClose className='close-btn' onClick={toggleTestDisclaimer}/>Sie befinden sich in der Testversion der Anwendung. Ihnen werden zufallsgenerierte Testdaten angezeigt. 
                         Änderungen daran werden nicht gespeichert und verschwinden beim Aktualisieren.</p>
                  :
@@ -237,9 +250,9 @@ const Content = ({ apiKeys }) => {
                 </div>
                 {
                 !showRegister ? 
-                    <Login onLogin={login} onTest={getTestUser} onRegister={toggleRegister} />
+                    <Login onLogin={login} onTest={getTestUser} onRegister={toggleRegister} loginFailed={loginFailed} />
                 :
-                    <Register />
+                    <Register onLogin={toggleRegister} onRegister={register} />
                 }
                 <Error />
             </div>
