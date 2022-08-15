@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MdSupervisorAccount } from 'react-icons/md'
 import { HiCode } from 'react-icons/hi'
 
-const Register = ({ onLogin, onRegister }) => {
+const Register = ({ onLogin, onRegister, onTest, userExists }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,7 +13,10 @@ const Register = ({ onLogin, onRegister }) => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        if(password === passwordRep)
+        console.log(userExists(email))
+        if(userExists(email))
+            setError('Email wird bereits verwendet!');
+        else if(password === passwordRep)
         {
             let matches = password.match(/\d+/g);
             if(password.length < 8)
@@ -62,7 +65,7 @@ const Register = ({ onLogin, onRegister }) => {
 
             <div className='register-link-message'>
                 <HiCode className='login-icon' /> 
-                <div className='register-text'>Unschlüssig? <span className='register-link'>Testversion</span></div>
+                <div className='register-text'>Unschlüssig? <span className='register-link' onClick={onTest}>Testversion</span></div>
             </div>
         </div>
     );

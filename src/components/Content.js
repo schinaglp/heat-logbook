@@ -64,6 +64,8 @@ const Content = ({ apiKeys }) => {
             hash: hash,
             temps: {}
         });
+
+        return id;
     };
     
     const writeTemp = (driverId, entry) => {
@@ -102,6 +104,24 @@ const Content = ({ apiKeys }) => {
                 }
             }
         });
+    };
+
+    const checkUserExists = (email) => {
+        const db = getDatabase();
+        const reference = query(ref(db, `drivers`), orderByChild('email'), equalTo(email));
+        const returnValue = onValue(reference, (snapshot) => {
+            const data = snapshot.val();
+            let userList = [];
+            snapshot.forEach((child) => {
+                userList.push(child.val());
+            });
+            if(userList.length < 1)
+                return false;
+            else
+                return true;
+        });
+        console.log(typeof(returnValue))
+        return returnValue;
     };
     
     const readLatestTemps = (driverId, withLimit = true) => {
@@ -170,6 +190,7 @@ const Content = ({ apiKeys }) => {
     };
 
     const toggleRegister = () => {
+        setLoginFailed(false);
         setShowRegister(!showRegister);
     };
 
@@ -220,6 +241,11 @@ const Content = ({ apiKeys }) => {
 
     const register = (email, password) => {
         console.log(email);
+        const userID = writeDriver(email, bcrypt.hashSync(password, bcrypt.genSaltSync()));
+
+        setTimeout(function () {
+            setCurrentUser(userID);
+        }, 1000);
     };
 
     return (
@@ -252,7 +278,7 @@ const Content = ({ apiKeys }) => {
                 !showRegister ? 
                     <Login onLogin={login} onTest={getTestUser} onRegister={toggleRegister} loginFailed={loginFailed} />
                 :
-                    <Register onLogin={toggleRegister} onRegister={register} />
+                    <Register onLogin={toggleRegister} onRegister={register} onTest={getTestUser} userExists={checkUserExists} />
                 }
                 <Error />
             </div>
