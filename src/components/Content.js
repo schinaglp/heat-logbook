@@ -106,21 +106,32 @@ const Content = ({ apiKeys }) => {
         });
     };
 
-    const checkUserExists = (email) => {
-        const db = getDatabase();
-        const reference = query(ref(db, `drivers`), orderByChild('email'), equalTo(email));
-        const returnValue = onValue(reference, (snapshot) => {
-            const data = snapshot.val();
-            let userList = [];
-            snapshot.forEach((child) => {
-                userList.push(child.val());
+    const checkUserExists = async (email) => {
+        const userPromise = new Promise((resolve, reject) => {
+            const db = getDatabase();
+            const reference = query(ref(db, `drivers`), orderByChild('email'), equalTo(email));
+            onValue(reference, (snapshot) => {
+                const data = snapshot.val();
+                let userList = [];
+                snapshot.forEach((child) => {
+                    userList.push(child.val());
+                });
+                if(userList.length < 1) 
+                    resolve(false);
+                else
+                    resolve(true);
+
             });
-            if(userList.length < 1)
-                return false;
-            else
-                return true;
+
         });
-        console.log(typeof(returnValue))
+
+        const returnValue = userPromise
+            .then((response) => {
+                return response;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         return returnValue;
     };
     
@@ -162,7 +173,7 @@ const Content = ({ apiKeys }) => {
 
     const addEntry = (entry) => {
         const _id = uuidv4();
-        entry.date = (new Date().getTime())/1000;
+        entry.date = (new Date().getTime()/1000);
 
         const newEntry = { _id, ...entry };
         if(currentUser !== testUser) {
@@ -221,7 +232,10 @@ const Content = ({ apiKeys }) => {
             return false;
         else if(checkEntryToday(tempList[0])) {
             if(currentUser !== testUser)
+            {
+                setTempList(tempList.slice(1));
                 removeTemp(currentUser, tempList[0]._id);
+            }
             else
                 setTempList(tempList.slice(1));
             return true;

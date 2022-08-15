@@ -12,7 +12,7 @@ const Entries = ({ entries }) => {
 
     let lastEntry = {
         date: 0
-    }
+    };
     const longList = entries.map((e) => {
                         if((new Date(e.date*1000)).getMonth() !== (new Date(lastEntry.date*1000)).getMonth()) {
                             lastEntry = e;
@@ -25,9 +25,12 @@ const Entries = ({ entries }) => {
 
     return (
         Object.keys(entries).length <= 3 ?
-            <div className='temp-container'>
-                { shortList }
-            </div>
+            Object.keys(entries).length == 0 ?
+                <p className='no-entries'>Keine Einträge für dieses Jahr gefunden!</p>
+            :
+                <div className='temp-container'>
+                    { shortList }
+                </div>
         :
             <div className='temp-container'>
                 { longList }
