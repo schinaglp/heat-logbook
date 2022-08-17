@@ -13,7 +13,6 @@ const Register = ({ onLogin, onRegister, onTest, userExists }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(`return value in Register: ${await userExists(email)}`)
         if(await userExists(email))
             setError('Email wird bereits verwendet!');
         else if(password === passwordRep)

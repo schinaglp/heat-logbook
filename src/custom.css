@@ -40,7 +40,39 @@ body {
   background: linear-gradient(165deg, rgba(43,83,83,1) 0%, rgba(83,164,164,1) 100%);
 }
 
-.header {
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background-color: #EC8656;
+  padding: 0.5em 0em;
+  font-size: 4.5vw;
+}
+
+.navbar-element {
+  cursor: pointer;
+}
+
+.navbar-active {
+  color: #3c7272;
+  font-weight: 700;
+}
+
+.navbar-stats {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.arrow-up {
+  width: 0; 
+  height: 0; 
+  border-left: 0.7em solid transparent;
+  border-right: 0.7em solid transparent; 
+  border-bottom: 0.7em solid #EC8656;
+  margin-left: auto;
+  margin-right: 9.5%;
+}
+
+.header-name {
   font-size: 9vw;
   padding: 0.3em;
   display: block;
@@ -58,6 +90,8 @@ body {
   margin-right: 5%;
   margin-left: 0em;
   margin-top: 0.6em;
+  cursor: pointer;
+  user-select: none;
 }
 
 .icon :active {
@@ -382,7 +416,11 @@ body {
     font-size: 1.6em;
   }
 
-  .header {
+  .navbar {
+    font-size: 1.3em;
+  }
+
+  .header-name {
     font-size: 3em;
   }
 

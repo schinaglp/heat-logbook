@@ -28,6 +28,7 @@ const Content = ({ apiKeys }) => {
     const [showRegister, setShowRegister] = useState(false);
     const [loginFailed, setLoginFailed] = useState(false);
     const [testUser] = useState('3bbcad25-c0e0-4a4d-979c-eab6ffaa7d32');
+    const [showStats, setShowStats] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -205,6 +206,10 @@ const Content = ({ apiKeys }) => {
         setShowRegister(!showRegister);
     };
 
+    const toggleStats = (showBool) => {
+        setShowStats(showBool);
+    };
+
     const checkEntryToday = (entry) => {
         if(new Date(entry.date*1000).getDate() === new Date().getDate() && 
            new Date(entry.date*1000).getMonth() === new Date().getMonth() &&
@@ -249,6 +254,14 @@ const Content = ({ apiKeys }) => {
         readDriver(email, password);
     };
 
+    const logout = () => {
+        setCurrentUser('');
+        if(headerCount % 2 === 1)
+            toggleAll();
+        setShowAdd(false);
+        setShowStats(false);
+    }
+
     const getTestUser = () => {
         setCurrentUser(testUser);
     };
@@ -265,28 +278,39 @@ const Content = ({ apiKeys }) => {
     return (
         currentUser ?
             <div className='content-box'>
-                <div className='upper-class'>
-                    <Header icon={<FiMenu />} />  
-                    <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} />
-                </div>
-                <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
-                { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
-                <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
-                <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
                 {
-                currentUser === testUser && showTestDisclaimer ?
-                    <p className='test-disclaimer'><MdClose className='close-btn' onClick={toggleTestDisclaimer}/>Sie befinden sich in der Testversion der Anwendung. Ihnen werden zufallsgenerierte Testdaten angezeigt. 
-                        Änderungen daran werden nicht gespeichert und verschwinden beim Aktualisieren.</p>
-                 :
-                    <div></div>
+                    !showStats ? 
+                        <div>
+                            <div className='upper-class'>
+                                <Header icon={<FiMenu />} currentPage={'home'} onLogout={logout} showStats={toggleStats} />  
+                                <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} />
+                            </div>
+                            <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
+                            { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
+                            <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
+                            <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
+                            {
+                            currentUser === testUser && showTestDisclaimer ?
+                                <p className='test-disclaimer'><MdClose className='close-btn' onClick={toggleTestDisclaimer}/>Sie befinden sich in der Testversion der Anwendung. Ihnen werden zufallsgenerierte Testdaten angezeigt. 
+                                    Änderungen daran werden nicht gespeichert und verschwinden beim Aktualisieren.</p>
+                            :
+                                <div></div>
+                            }
+                            <Error />
+                        </div>
+                    :
+                        <div>
+                            <div className='upper-class'>
+                                <Header icon={<FiMenu />} currentPage={'stats'} onLogout={logout} showStats={toggleStats} />  
+                                {/* <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} /> */}
+                            </div>
+                        </div>
                 }
-
-                <Error />
             </div>
         :
             <div className='content-box'>
                 <div style={{paddingBottom: '0.5em'}} className='upper-class'>
-                    <Header />
+                    <Header currentPage={'login'} />
                 </div>
                 {
                 !showRegister ? 
