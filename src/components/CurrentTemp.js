@@ -4,18 +4,24 @@ import { useEffect } from 'react';
 import { RiLoader2Line } from 'react-icons/ri'
 import Hyphenated from 'react-hyphen';
 
-const CurrentTemp = ({ openWeatherApiKey }) => {
+const CurrentTemp = ({ openWeatherApiKey, noLocation }) => {
     const [weatherData, setweatherData] = useState();
+    const [defaultWeather, setDefaultWeather] = useState({
+        latitude: 48.2083,
+        longitude: 16.3731
+    });
+    const [defaultWeatherAccepted, setAccepted] = useState(false);
 
     useEffect(() => {
 
         fetchData();
 
         async function fetchData() {
-            setweatherData(await getWeatherData(openWeatherApiKey));
+            setweatherData(await getWeatherData(openWeatherApiKey, defaultWeather, noLocation));
         }
 
-      }, []);
+
+    }, []);
 
     let message = <RiLoader2Line className='load-spinner' />;
     let icon = null;
@@ -24,9 +30,9 @@ const CurrentTemp = ({ openWeatherApiKey }) => {
         let location = <Hyphenated>{weatherData.name}</Hyphenated>;
 
         message = 
-        <h3 className='weather-text'>      
-            <strong>{ location }</strong> <strong style={{color: '#2B5353'}}>{ Math.round(weatherData.main.temp) }&deg;C</strong>
-        </h3>;
+            <h3 className='weather-text'>      
+                <strong>{ location }</strong> <strong style={{color: '#2B5353'}}>{ Math.round(weatherData.main.temp) }&deg;C</strong>
+            </h3>;
 
         icon = <img className='weather-icon' src={iconUrl} alt="Wetter Icon" />;
  
@@ -49,10 +55,20 @@ const getPositionPromise = () => {
     });
 }
 
-const getWeatherData = async (openWeatherApiKey) => {
-    const position = await getPositionPromise();
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
+const getWeatherData = async (openWeatherApiKey, defaultWeather, noLocation) => {
+    let latitude = 0;
+    let longitude = 0;
+    try {
+        const position = await getPositionPromise();
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+    }
+    catch (error) {
+        console.log('Standort nicht gefunden. Standard-Standort wird verwendet');
+        latitude = defaultWeather.latitude;
+        longitude = defaultWeather.longitude;
+        noLocation();
+    }
 
     let result = JSON.parse(await makeRequest(latitude, longitude, openWeatherApiKey));
     return result;

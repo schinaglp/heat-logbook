@@ -29,6 +29,8 @@ const Content = ({ apiKeys }) => {
     const [loginFailed, setLoginFailed] = useState(false);
     const [testUser] = useState('3bbcad25-c0e0-4a4d-979c-eab6ffaa7d32');
     const [showStats, setShowStats] = useState(false);
+    const [defaultWeather, setDefaultWeather] = useState(false);
+    const [defaultWeatherAccepted, setAccepted] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -191,6 +193,8 @@ const Content = ({ apiKeys }) => {
     }
 
     const toggleAll = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         setHeaderCount(headerCount + 1);
         if(currentUser !== testUser)
             readLatestTemps(currentUser, showAll);
@@ -283,7 +287,7 @@ const Content = ({ apiKeys }) => {
                         <div>
                             <div className='upper-class'>
                                 <Header icon={<FiMenu />} currentPage={'home'} onLogout={logout} showStats={toggleStats} />  
-                                <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} />
+                                <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} noLocation={() => setDefaultWeather(true)} />
                             </div>
                             <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
                             { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
@@ -296,6 +300,13 @@ const Content = ({ apiKeys }) => {
                             :
                                 <div></div>
                             }
+                            {
+                            defaultWeather && !defaultWeatherAccepted ?
+                                <p className='test-disclaimer'><MdClose className='close-btn' onClick={() => {setDefaultWeather(false); setAccepted(true)}}/>Standort konnte nicht ermittelt werden. Es wird das Wetter für WIEN angezeigt.</p>
+                            :
+                                <div></div>
+                            }
+                            
                             <Error />
                         </div>
                     :
@@ -309,7 +320,7 @@ const Content = ({ apiKeys }) => {
             </div>
         :
             <div className='content-box'>
-                <div style={{paddingBottom: '0.5em'}} className='upper-class'>
+                <div className='upper-class'>
                     <Header currentPage={'login'} />
                 </div>
                 {

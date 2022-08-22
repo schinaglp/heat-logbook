@@ -23,9 +23,9 @@ const Login = ({ onLogin, onTest, onRegister, loginFailed }) => {
             <form className='login-form' onSubmit={onSubmit}>
                 <div className='login-input'>
                     <label htmlFor="login-email" className='login-label'>E-Mail</label><br />
-                    <input type="email" id="login-email" name="email" required value={email} onChange={e => {setEmail(e.target.value)}}/><br />
-                    <label htmlFor="login-password" className='login-label'>Passwort</label><br />
-                    <input type="password" id="login-password" name="password" value={password} onChange={e => {setPassword(e.target.value)}}/>
+                    <input type="email" id="login-email" name="email" autoComplete='username email' required value={email} onChange={e => {setEmail(e.target.value)}}/><br />
+                    <label htmlFor="login-password" className='login-label' >Passwort</label><br />
+                    <input type="password" id="login-password" name="password" autoComplete='password current-password' value={password} onChange={e => {setPassword(e.target.value)}}/>
                     {
                         loginFailed ?
                             <p className='login-failed'>E-Mail oder Password falsch!</p>

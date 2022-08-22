@@ -15,6 +15,8 @@ body {
   background: linear-gradient(180deg, rgba(43,83,83,1) 0%, rgba(236,134,86,1) 100%);
   font-family: 'Roboto', sans-serif;
   min-height: 100vh;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .content-box {
@@ -46,6 +48,10 @@ body {
   background-color: #EC8656;
   padding: 0.5em 0em;
   font-size: 4.5vw;
+  /* position: relative;
+  top: -1em; */
+  margin-bottom: 0.5em;
+  user-select: none;
 }
 
 .navbar-element {
@@ -75,6 +81,7 @@ body {
 .header-name {
   font-size: 9vw;
   padding: 0.3em;
+  padding-bottom: 0.5em;
   display: block;
   margin: 0.3em 0em 0em 0.5em;
   font-weight: 700;
@@ -84,6 +91,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 4.5em;
 }
 
 .icon {
@@ -102,8 +110,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  hyphens: auto;
-  padding-bottom: 0.5em;
+  padding-bottom: 1.5em;
+  height: 5.5em;
   /* border: 1px none black;
   border-radius: 0.9em;
   box-shadow: 0px 0px 17px 0px rgba(0,0,0,0.21);
@@ -228,7 +236,7 @@ body {
   display: flex;
   justify-content: flex-end;
   margin-right: 0.3em;
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
   user-select: none;
 }
 
@@ -385,7 +393,7 @@ body {
   color: #FFFFFF;
   background: linear-gradient(165deg, rgba(230,110,55,1) 0%, rgba(255,159,113,1) 100%);
   margin: 0.5em;
-  margin-top: 1.5em;
+  margin-top: 0.75em;
   padding: 0.7em;
 }
 
@@ -424,10 +432,16 @@ body {
     font-size: 3em;
   }
 
+  .weather-message {
+    justify-content: space-evenly;
+    position: relative;
+    right: 0.75em;
+  }
+
   .weather-text {
     font-size: 2.7em;
     width: 70%;
-    margin-bottom: 0.5em;
+    margin: 0 0.5em;
   }
 
   .icon-disclaimer {

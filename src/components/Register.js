@@ -44,11 +44,11 @@ const Register = ({ onLogin, onRegister, onTest, userExists }) => {
             <form className='login-form' onSubmit={onSubmit}>
                 <div className='login-input'>
                     <label htmlFor="login-email" className='login-label'>E-Mail</label><br />
-                    <input type="email" id="login-email" name="email" required value={email} onChange={e => {setEmail(e.target.value)}}/><br />
+                    <input type="email" id="login-email" name="email" autoComplete='email' required value={email} onChange={e => {setEmail(e.target.value)}}/><br />
                     <label htmlFor="login-password" className='login-label'>Passwort</label><br />
-                    <input type="password" id="login-password" name="password" value={password} onChange={e => {setPassword(e.target.value)}}/>
+                    <input type="password" id="login-password" name="password" autoComplete='new-password' value={password} onChange={e => {setPassword(e.target.value)}}/>
                     <label htmlFor="login-password-rep" className='login-label'>Passwort wiederholen</label><br />
-                    <input type="password" id="login-password-rep" name="password-rep"  value={passwordRep} onChange={e => {setPasswordRep(e.target.value)}}/>
+                    <input type="password" id="login-password-rep" name="password-rep" autoComplete='new-password' value={passwordRep} onChange={e => {setPasswordRep(e.target.value)}}/>
                     <p className='login-failed'>{error}</p>
                 </div>
 
