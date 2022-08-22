@@ -41,7 +41,7 @@ const Register = ({ onLogin, onRegister, onTest, userExists }) => {
     return (
         <div>
             <h1 className='login-header'>Registrieren</h1>
-            <form className='login-form' onSubmit={onSubmit}>
+            <form className='login-form' autoComplete='on' autoCapitalize='none' autoCorrect='false' onSubmit={onSubmit}>
                 <div className='login-input'>
                     <label htmlFor="login-email" className='login-label'>E-Mail</label><br />
                     <input type="email" id="login-email" name="email" autoComplete='email' required value={email} onChange={e => {setEmail(e.target.value)}}/><br />
