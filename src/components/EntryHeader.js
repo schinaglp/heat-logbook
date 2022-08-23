@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 
-const EntryHeader = ({ onToggleAdd, entryHeader }) => {
+const EntryHeader = ({ onToggleAdd, entryHeader, showAdd }) => {
 
-    const [button, setButton] = useState('+');
+    const [button, setButton] = useState(showAdd ? <>&mdash;</> : '+');
 
     const toggleButton = () => {
-        if(button === '+')
-            setButton(<>&mdash;</>)
-        else
+        if(showAdd)
             setButton('+');
+        else
+            setButton(<>&mdash;</>)
+
 
         onToggleAdd();
     }

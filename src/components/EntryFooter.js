@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-const EntryFooter = ({ onDelete, onToggleAll }) => {
+const EntryFooter = ({ onDelete, onToggleAll, showAll }) => {
 
-    const [buttonText, setButtonText] = useState(["Alle anzeigen", "Weniger anzeigen"]);
-    const [buttonCount, setButtonCount] = useState(0);
+    const [buttonText, setButtonText] = useState(showAll ? 'Weniger anzeigen' : 'Alle anzeigen');
 
     const deleteToday = () => {
         if(!onDelete()) {
@@ -13,13 +12,16 @@ const EntryFooter = ({ onDelete, onToggleAll }) => {
 
     const ToggleAll = () => {
         onToggleAll();
-        setButtonCount(buttonCount + 1);
+        if(showAll)
+            setButtonText('Alle anzeigen')
+        else
+            setButtonText('Weniger anzeigen');
     };
 
     return (
         <div className='entry-footer'>
             <div className='footer-child' onClick={deleteToday}>Heutigen Eintrag entfernen</div>
-            <div className='footer-child' onClick={ToggleAll}>{buttonText[buttonCount%2]}</div>
+            <div className='footer-child' onClick={ToggleAll}>{buttonText}</div>
         </div>
     );
 }

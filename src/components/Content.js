@@ -8,6 +8,7 @@ import Error from './Error';
 import AddEntry from './AddEntry';
 import Login from './Login';
 import Register from './Register';
+import Stats from './Stats';
 import { useState } from 'react';
 import { FiMenu } from 'react-icons/fi'
 import { MdClose } from 'react-icons/md'
@@ -36,7 +37,7 @@ const Content = ({ apiKeys }) => {
         fetchData();
 
         function fetchData() {
-            if((currentUser === testUser && tempList.length < 1) ||
+            if((currentUser === testUser /*&& tempList.length < 1*/) || 
                 (currentUser && currentUser.length > 0 && currentUser !== testUser)) {
                     readLatestTemps(currentUser, !showAll);
                 }
@@ -142,15 +143,10 @@ const Content = ({ apiKeys }) => {
         const db = getDatabase();
         let reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'));
         if(withLimit)
-        {
-            console.log(`withLimit | currentUser = ${currentUser} | testUser = ${testUser}`);
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), limitToLast(3));
-        }
+        
         if(driverId === testUser)
-        {
-            console.log(`driverId === testUser | currentUser = ${currentUser} | testUser = ${testUser}`);
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400));
-        }
 
         onValue(reference, (snapshot) => {
             const data = snapshot.val();
@@ -271,7 +267,6 @@ const Content = ({ apiKeys }) => {
     };
 
     const register = (email, password) => {
-        console.log(email);
         const userID = writeDriver(email, bcrypt.hashSync(password, bcrypt.genSaltSync()));
 
         setTimeout(function () {
@@ -289,10 +284,10 @@ const Content = ({ apiKeys }) => {
                                 <Header icon={<FiMenu />} currentPage={'home'} onLogout={logout} showStats={toggleStats} />  
                                 <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} noLocation={() => setDefaultWeather(true)} />
                             </div>
-                            <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} />
+                            <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} showAdd={showAdd} />
                             { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
                             <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
-                            <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} />
+                            <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} showAll={showAll} />
                             {
                             currentUser === testUser && showTestDisclaimer ?
                                 <p className='test-disclaimer'><MdClose className='close-btn' onClick={toggleTestDisclaimer}/>Sie befinden sich in der Testversion der Anwendung. Ihnen werden zufallsgenerierte Testdaten angezeigt. 
@@ -315,6 +310,8 @@ const Content = ({ apiKeys }) => {
                                 <Header icon={<FiMenu />} currentPage={'stats'} onLogout={logout} showStats={toggleStats} />  
                                 {/* <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} /> */}
                             </div>
+
+                            <Stats />
                         </div>
                 }
             </div>
