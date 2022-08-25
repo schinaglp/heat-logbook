@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const EntryHeader = ({ onToggleAdd, entryHeader, showAdd }) => {
+const EntryHeader = ({ onToggleAdd, entryHeader, showAdd, noPlus }) => {
 
     const [button, setButton] = useState(showAdd ? <>&mdash;</> : '+');
 
@@ -17,9 +17,18 @@ const EntryHeader = ({ onToggleAdd, entryHeader, showAdd }) => {
     return (
         <div className='entry-header'>
             <div><strong>{ entryHeader }</strong></div>
-            <div className='add-btn' onClick={toggleButton}>{ button }</div>
+            {
+            noPlus ?
+                <div></div>
+            :
+                <div className='add-btn' onClick={toggleButton}>{ button }</div>
+            }
         </div>
     );
 }
+
+EntryHeader.defaultProps = {
+    noPlus: false,
+  }
 
 export default EntryHeader;

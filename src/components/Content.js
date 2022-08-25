@@ -39,7 +39,7 @@ const Content = ({ apiKeys }) => {
         function fetchData() {
             if((currentUser === testUser /*&& tempList.length < 1*/) || 
                 (currentUser && currentUser.length > 0 && currentUser !== testUser)) {
-                    readLatestTemps(currentUser, !showAll);
+                    readTemps(currentUser);
                 }
 
         }
@@ -139,11 +139,9 @@ const Content = ({ apiKeys }) => {
         return returnValue;
     };
     
-    const readLatestTemps = (driverId, withLimit = true) => {
+    const readTemps = (driverId) => {
         const db = getDatabase();
         let reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'));
-        if(withLimit)
-            reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), limitToLast(3));
         
         if(driverId === testUser)
             reference = query(ref(db, `drivers/${driverId}/temps`), orderByChild('date'), endBefore(((new Date()).getTime() / 1000)-86400));
@@ -165,8 +163,9 @@ const Content = ({ apiKeys }) => {
     const removeTemp = (driverId, tempId) => {
         const db = getDatabase();
         let reference = ref(db, `drivers/${driverId}/temps/${tempId}`);
-        remove(reference);
-        readLatestTemps(currentUser, !showAll);
+        setTempList(tempList.slice(1));
+        if(currentUser !== testUser)
+            remove(reference);
     };
 
 
@@ -175,13 +174,10 @@ const Content = ({ apiKeys }) => {
         entry.date = (new Date().getTime()/1000);
 
         const newEntry = { _id, ...entry };
-        if(currentUser !== testUser) {
+        setTempList([newEntry, ...tempList]);
+        if(currentUser !== testUser)
             writeTemp(currentUser, newEntry);
-            readLatestTemps(currentUser, !showAll);
-        }
-        else {
-            setTempList([newEntry, ...tempList]);
-        }
+
     }
 
     const toggleAdd = () => {
@@ -192,8 +188,6 @@ const Content = ({ apiKeys }) => {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         setHeaderCount(headerCount + 1);
-        if(currentUser !== testUser)
-            readLatestTemps(currentUser, showAll);
         setShowAll(!showAll);
     }
 
@@ -236,13 +230,7 @@ const Content = ({ apiKeys }) => {
         if(tempList.length < 1)
             return false;
         else if(checkEntryToday(tempList[0])) {
-            if(currentUser !== testUser)
-            {
-                setTempList(tempList.slice(1));
-                removeTemp(currentUser, tempList[0]._id);
-            }
-            else
-                setTempList(tempList.slice(1));
+            removeTemp(currentUser, tempList[0]._id);
             return true;
         }
         else {
@@ -286,7 +274,7 @@ const Content = ({ apiKeys }) => {
                             </div>
                             <EntryHeader onToggleAdd={toggleAdd} entryHeader={entryHeader[headerCount%2]} showAdd={showAdd} />
                             { showAdd && <AddEntry onAdd={addEntry} updatedToday={updatedToday} /> }
-                            <Entries entries={currentUser !== testUser ? tempList : showAll ? tempList : tempList.slice(0, 3)} />
+                            <Entries entries={showAll ? tempList : tempList.slice(0, 3)} />
                             <EntryFooter onDelete={deleteToday} onToggleAll={toggleAll} showAll={showAll} />
                             {
                             currentUser === testUser && showTestDisclaimer ?
@@ -311,7 +299,7 @@ const Content = ({ apiKeys }) => {
                                 {/* <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} /> */}
                             </div>
 
-                            <Stats />
+                            <Stats tempList={tempList} />
                         </div>
                 }
             </div>

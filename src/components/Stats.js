@@ -1,111 +1,76 @@
 import React from 'react';
 import { PolarArea } from 'react-chartjs-2';
-import { Chart, registerables } from 'chart.js'
 import { Bar } from 'react-chartjs-2';
-import { Scatter } from 'react-chartjs-2';
 import { Line } from 'react-chartjs-2';
-Chart.register(...registerables)
+import ChartContainer from './ChartContainer';
+import ScatterChart from './ScatterChart';
+import DonutChart from './DonutChart';
+import StatSummary from './StatSummary';
+import DonutDescription from './DonutDescription';
+import EntryHeader from './EntryHeader';
+import Entries from './Entries';
 
-const Stats = () => {
-    let delayed;
-    const options = {
-        plugins: {
-          title: {
-            display: true,
-            text: 'Platzhalter Statistik',
-          },
-        },
-        animation: {
-            onComplete: () => {
-              delayed = true;
-            },
-            delay: (context) => {
-              let delay = 0;
-              delay = context.dataIndex * 300 + context.datasetIndex * 100;
-              return delay;
-            },
-        },
-        responsive: true,
-        scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true,
-          },
-        },
-      };
+const Stats = ({ tempList }) => {
 
-      const ScatterOptions = {
-        plugins: {
-          title: {
-            display: true,
-            text: 'Platzhalter Statistik',
-          },
-        },
-        responsive: true,
-        scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true,
-          },
-        },
-      };
-      
-      const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-      
-      const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132)',
-                'rgba(54, 162, 235)',
-                'rgba(255, 206, 86)',
-                'rgba(75, 192, 192)',
-                'rgba(153, 102, 255)',
-                'rgba(255, 159, 64)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
+    let tempListSeperated = {
+      cold: [],
+      good: [],
+      hot: []
     };
 
-    const scatterData = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: 'rgba(255, 99, 132, 1)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-        }]
-    };
+    tempList.forEach(temp => {
+      switch (temp.feedback) {
+        case 0:
+          tempListSeperated.cold.push(temp);
+          break;
+        case 1:
+          tempListSeperated.good.push(temp);
+          break;
+        case 2:
+          tempListSeperated.hot.push(temp);
+          break;
+      }
+    });
+
+    let percentages = [
+      Math.floor(tempListSeperated.cold.length / tempList.length * 100),
+      Math.ceil(tempListSeperated.good.length / tempList.length * 100)
+    ];
+
+    if((percentages[0] + percentages[1] + Math.floor(tempListSeperated.hot.length / tempList.length * 100)) !== 100)
+      percentages.push(Math.ceil(tempListSeperated.hot.length / tempList.length * 100));
+    else
+      percentages.push(Math.floor(tempListSeperated.hot.length / tempList.length * 100));
+
+      
+    let extremes = [];
+    extremes.push(
+      tempList.reduce(function(prev, curr) {
+        return prev.temp < curr.temp ? prev : curr;
+      })
+    );
+    extremes.push(
+      tempList.reduce(function(prev, curr) {
+        return prev.temp > curr.temp ? prev : curr;
+      })
+    );
+
 
     return (
         <div>
-            <Bar 
-                data={data}
-                options={options}
-                height={400}
-                width={600}
-            />
-            <Line 
-                data={scatterData}
-                options={ScatterOptions}
-                height={400}
-                width={600}
-            />
+          {/* <StatSum<mary tempList={tempList} coldTemps={coldScatter.length} goodTemps={goodScatter.length} hotTemps={hotScatter.length} /> */}
+          {/* <ChartContainer chart={chart} /> */}
+          <div className='donut-responsive'>
+            <div className='donut-line'>
+              <DonutDescription percentages={percentages} />
+              <DonutChart tempList={tempListSeperated} />
+            </div>
+            <div className='entries-responsive'>
+              <EntryHeader entryHeader={'Extremwerte'} noPlus={true} />
+              <Entries entries={extremes} />
+            </div>
+          </div>
+          <ScatterChart tempList={tempListSeperated} />
         </div>
     );
   }

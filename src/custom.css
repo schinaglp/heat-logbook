@@ -64,8 +64,8 @@ body {
 }
 
 .navbar-stats {
-  border-bottom-left-radius: 0.5em;
-  border-bottom-right-radius: 0.5em;
+  border-bottom-left-radius: 0.4em;
+  border-bottom-right-radius: 0.4em;
 }
 
 .arrow-up {
@@ -133,6 +133,14 @@ body {
   color: #e66e37;
 }
 
+.stat-green {
+  color: #28B463;
+}
+
+.stat-blue {
+  color: #5DADE2;  
+}
+
 .weather-icon {
   margin-left: 1em;
 }
@@ -156,7 +164,6 @@ body {
 }
 
 .entry-header {
-  margin-top: 0.5em;
   margin-right: 0.8em;
   margin-bottom: 0em;
   padding-left: 0.8em;
@@ -164,7 +171,6 @@ body {
   justify-content: space-between;
   font-size: 6vw;
   align-items: center;
-  height: 1.7em;
   color: #e66e37;
 }
 
@@ -414,13 +420,92 @@ body {
   margin: 1em 0em;
 }
 
+.chart-container {
+  border: 0px solid black;
+  border-radius: 0.5em;
+  padding: 0.75em;
+  margin: 0.6em;
+  margin-bottom: 1em;
+  box-shadow: 0px 0px 17px 0px rgba(0,0,0,0.21);
+  background-color: #FCFCFC;
+  border-left: 15px #3C7272 solid;
+}
 
+.small-chart {
+  width: 50%;
+}
+
+.donut-line {
+  display: flex;
+  margin-bottom: 0.5em;
+}
+
+.donut {
+  position: relative;
+  bottom: 0.3em;
+  right: 0.1em;
+}
+
+.donut-description {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 50%;
+}
+
+.donut-icon {
+  font-size: 2em;
+}
+
+.percentage-line {
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+  right: 0.5em;
+}
+
+.percentage {
+  color: #2D5353;
+  font-weight: 700;
+  /* margin-left: 0.5em; */
+  font-size: 1.7em;
+}
+
+.stat-summary {
+  color: #3C7272;
+  font-weight: 700;
+  font-size: 1.2em;
+  display: flex;
+}
+
+.top-summary {
+  color: #FFFFFF;
+  background: linear-gradient(165deg, rgba(230,110,55,1) 0%, rgba(255,159,113,1) 100%);
+  font-weight: 700;
+  font-size: 1.2em;
+  text-align: center;
+  margin-bottom: 0.8em;
+}
+
+.sub-summary {
+  width: 33%;
+  margin-top: 0;
+  color: #FFFFFF;
+  /* background: linear-gradient(165deg, rgba(230,110,55,1) 0%, rgba(255,159,113,1) 100%); */
+  background: linear-gradient(165deg, rgba(43,83,83,1) 0%, rgba(83,164,164,1) 100%);
+  text-align: center;
+}
 
 
 
 
 
 @media screen and (min-width: 601px) {
+  .content-box {
+    padding: 1em;
+  }
+
   .entry-header {
     font-size: 1.6em;
   }
@@ -482,4 +567,21 @@ body {
   .login-icon {
     font-size: 2em;
   }
+
+  .donut-responsive {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  .entries-responsive {
+    width: 59%;
+  }
+
+
+  .donut-line {
+    width: 41%;
+    position: relative;
+    top: 0.6em;
+  }
+
 }
