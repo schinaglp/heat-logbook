@@ -10,7 +10,6 @@ const CurrentTemp = ({ openWeatherApiKey, noLocation }) => {
         latitude: 48.2083,
         longitude: 16.3731
     });
-    const [defaultWeatherAccepted, setAccepted] = useState(false);
 
     useEffect(() => {
 

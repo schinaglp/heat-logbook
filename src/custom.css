@@ -432,7 +432,7 @@ body {
 }
 
 .small-chart {
-  width: 50%;
+  /* width: 50%; */
 }
 
 .donut-line {
@@ -451,6 +451,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  width: 50%;
+}
+
+.donut-box {
   width: 50%;
 }
 
@@ -568,15 +572,26 @@ body {
     font-size: 2em;
   }
 
+  .arrow-up {
+    margin-right: 8.5%;
+  }
+
   .donut-responsive {
     display: flex;
     flex-direction: row-reverse;
   }
 
+  .donut-box {
+    width: 55%;
+  }
+
+  .donut-description {
+    width: 45%;
+  }
+
   .entries-responsive {
     width: 59%;
   }
-
 
   .donut-line {
     width: 41%;

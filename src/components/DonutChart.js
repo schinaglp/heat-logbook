@@ -31,6 +31,9 @@ const DonutChart = ({ tempList }) => {
         }
       },
       responsive: true,
+      animation: {
+        animateRotate: true
+      }
     };
       
 
@@ -57,7 +60,7 @@ const DonutChart = ({ tempList }) => {
     const chart = <Doughnut className='donut'
                       data={data}
                       options={options}
-                      height={220}
+                      // height={220}
                   />
 
 

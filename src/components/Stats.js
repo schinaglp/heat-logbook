@@ -9,6 +9,7 @@ import StatSummary from './StatSummary';
 import DonutDescription from './DonutDescription';
 import EntryHeader from './EntryHeader';
 import Entries from './Entries';
+import BarChart from './BarChart';
 
 const Stats = ({ tempList }) => {
 
@@ -63,7 +64,9 @@ const Stats = ({ tempList }) => {
           <div className='donut-responsive'>
             <div className='donut-line'>
               <DonutDescription percentages={percentages} />
-              <DonutChart tempList={tempListSeperated} />
+              <div className='donut-box'>
+                <DonutChart tempList={tempListSeperated} />
+              </div>
             </div>
             <div className='entries-responsive'>
               <EntryHeader entryHeader={'Extremwerte'} noPlus={true} />
@@ -71,6 +74,7 @@ const Stats = ({ tempList }) => {
             </div>
           </div>
           <ScatterChart tempList={tempListSeperated} />
+          <BarChart tempList={tempList} />
         </div>
     );
   }
