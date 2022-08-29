@@ -45,37 +45,47 @@ const Stats = ({ tempList }) => {
 
       
     let extremes = [];
-    extremes.push(
-      tempList.reduce(function(prev, curr) {
-        return prev.temp < curr.temp ? prev : curr;
-      })
-    );
-    extremes.push(
-      tempList.reduce(function(prev, curr) {
-        return prev.temp > curr.temp ? prev : curr;
-      })
-    );
+    if(tempList.length > 0)
+    {
+      extremes.push(
+        tempList.reduce(function(prev, curr) {
+          return prev.temp < curr.temp ? prev : curr;
+        })
+      );
+      if(tempList.length > 1)
+        extremes.push(
+          tempList.reduce(function(prev, curr) {
+            return prev.temp > curr.temp ? prev : curr;
+          })
+        );
+    }
+
 
 
     return (
+      tempList.length > 0 ?
         <div>
-          {/* <StatSum<mary tempList={tempList} coldTemps={coldScatter.length} goodTemps={goodScatter.length} hotTemps={hotScatter.length} /> */}
-          {/* <ChartContainer chart={chart} /> */}
-          <div className='donut-responsive'>
-            <div className='donut-line'>
-              <DonutDescription percentages={percentages} />
-              <div className='donut-box'>
-                <DonutChart tempList={tempListSeperated} />
+            <EntryHeader entryHeader={'Alle Werte'} noPlus={true} />
+            <ScatterChart tempList={tempListSeperated} />
+            <div className='donut-responsive'>
+              <div className='donut-line'>
+                <DonutDescription percentages={percentages} />
+                <div className='donut-box'>
+                  <DonutChart tempList={tempListSeperated} />
+                </div>
+              </div>
+              <div className='entries-responsive'>
+                <EntryHeader entryHeader={'Extremwerte'} noPlus={true} />
+                <Entries entries={extremes} />
               </div>
             </div>
-            <div className='entries-responsive'>
-              <EntryHeader entryHeader={'Extremwerte'} noPlus={true} />
-              <Entries entries={extremes} />
+            <div className='avg-header'>
+              <EntryHeader entryHeader={'Durchschnittswerte'} noPlus={true} />
             </div>
-          </div>
-          <ScatterChart tempList={tempListSeperated} />
-          <BarChart tempList={tempList} />
+            <BarChart tempList={tempList} />
         </div>
+      :
+        <p className='no-entries'>Keine Einträge für dieses Jahr gefunden!</p>
     );
   }
 

@@ -476,32 +476,13 @@ body {
   font-size: 1.7em;
 }
 
-.stat-summary {
-  color: #3C7272;
-  font-weight: 700;
-  font-size: 1.2em;
-  display: flex;
+.avg-header {
+  margin-top: 0.5em;
 }
 
-.top-summary {
-  color: #FFFFFF;
-  background: linear-gradient(165deg, rgba(230,110,55,1) 0%, rgba(255,159,113,1) 100%);
-  font-weight: 700;
-  font-size: 1.2em;
-  text-align: center;
-  margin-bottom: 0.8em;
+.bar-chart {
+  margin-bottom: 1.5em;
 }
-
-.sub-summary {
-  width: 33%;
-  margin-top: 0;
-  color: #FFFFFF;
-  /* background: linear-gradient(165deg, rgba(230,110,55,1) 0%, rgba(255,159,113,1) 100%); */
-  background: linear-gradient(165deg, rgba(43,83,83,1) 0%, rgba(83,164,164,1) 100%);
-  text-align: center;
-}
-
-
 
 
 

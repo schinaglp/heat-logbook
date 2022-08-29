@@ -17,6 +17,7 @@ const BarChart = ({ tempList }) => {
 
   let avgTempPerMonth = [];
   let avgFeedbackPerMonth = [];
+  let tempsPerMonthKeys = [];
 
   const avg = (month, mode) => {
     let sum = 0;
@@ -31,15 +32,21 @@ const BarChart = ({ tempList }) => {
     return sum / month.length
   };
 
-  let tempsPerMonthKeys = [];
 
   tempsPerMonth.forEach((month, index) => {
     avgTempPerMonth.push(avg(month, 'temp'));
-    avgFeedbackPerMonth.push(avg(month, 'feedback'))
+    avgFeedbackPerMonth[index] = avg(month, 'feedback');
     tempsPerMonthKeys.push(index);
   });
 
+  avgFeedbackPerMonth = avgFeedbackPerMonth.map(feedback => {
+                          if(feedback === 1.5)
+                            return 1;
+                          return Math.round(feedback);
+                        });
 
+
+  const feedbackStrings = ['Kalt', 'Angenehm', 'Heiß'];                      
   const options = {
     plugins: {
       title: {
@@ -57,7 +64,8 @@ const BarChart = ({ tempList }) => {
       tooltip: {
         callbacks: {
             label: function(context) {
-                let label = ' Durchschnitt: ' + Math.floor(context.parsed.y*10)/10 + ' Grad';
+                let label = []
+                label.push(' Durchschnitt: ' + Math.floor(context.parsed.y*10)/10 + ' Grad & ' + feedbackStrings[avgFeedbackPerMonth[context.label]]);
                 return label;
             },
             title: () => null
@@ -89,8 +97,6 @@ const BarChart = ({ tempList }) => {
           },
         },
       }
-    },
-    animation: {
     }
   };
 
@@ -98,35 +104,28 @@ const BarChart = ({ tempList }) => {
     0: 'Jan.', 1: 'Feb.', 2: 'März', 3: 'Apr.', 4: 'Mai', 5: 'Jun.',
     6: 'Jul.', 7: 'Aug.', 8: 'Sept.', 9: 'Okt.', 10: 'Nov.', 11: 'Dez.'
   }
-    
-  // console.log(tempsPerMonthKeys);
-  // console.log([...Array(12).keys()].slice(tempsPerMonthKeys[0], tempsPerMonthKeys[tempsPerMonthKeys.length-1]+1));
 
+  let backgroundColors = [];
+  avgFeedbackPerMonth.forEach(feedback => {
+    switch (feedback) {
+      case 0:
+        backgroundColors.push('#5DADE2');
+        break;
+      case 2:
+        backgroundColors.push('#EC8656');
+        break;
+      default:
+        backgroundColors.push('#28B463');
+        break;
+    }
+  });
 
 
   const data = {
-    // labels: [...Array(avgPerMonth.length).keys()],
     labels: tempsPerMonthKeys,
     datasets: [{
       data: avgTempPerMonth,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
-      ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
-      ],
+      backgroundColor: backgroundColors,
       borderWidth: 1
     }]
   };
@@ -138,7 +137,7 @@ const BarChart = ({ tempList }) => {
                 />
                 
   return (
-      <div>
+      <div className='bar-chart'>
           <ChartContainer chart={chart} />
       </div>
   );

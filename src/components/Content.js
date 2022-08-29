@@ -30,6 +30,7 @@ const Content = ({ apiKeys }) => {
     const [loginFailed, setLoginFailed] = useState(false);
     const [testUser] = useState('3bbcad25-c0e0-4a4d-979c-eab6ffaa7d32');
     const [showStats, setShowStats] = useState(false);
+    const [showStatMessage, setShowStatMessage] = useState(true);
     const [defaultWeather, setDefaultWeather] = useState(false);
     const [defaultWeatherAccepted, setAccepted] = useState(false);
 
@@ -195,12 +196,18 @@ const Content = ({ apiKeys }) => {
         setShowTestDisclaimer(!showTestDisclaimer);
     };
 
+    const toggleStatMessage = () => {
+        setShowStatMessage(!showStatMessage);
+    }
+
     const toggleRegister = () => {
         setLoginFailed(false);
         setShowRegister(!showRegister);
     };
 
     const toggleStats = (showBool) => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         setShowStats(showBool);
     };
 
@@ -248,6 +255,9 @@ const Content = ({ apiKeys }) => {
             toggleAll();
         setShowAdd(false);
         setShowStats(false);
+        setTempList([]);
+        setLoginFailed(false);
+        setShowRegister(false);
     }
 
     const getTestUser = () => {
@@ -296,10 +306,15 @@ const Content = ({ apiKeys }) => {
                         <div>
                             <div className='upper-class'>
                                 <Header icon={<FiMenu />} currentPage={'stats'} onLogout={logout} showStats={toggleStats} />  
-                                {/* <CurrentTemp openWeatherApiKey={apiKeys.openWeatherApiKey} /> */}
                             </div>
 
                             <Stats tempList={tempList} />
+                            {
+                            showStatMessage && tempList.length > 0 ?     
+                                <p className='test-disclaimer'><MdClose className='close-btn' onClick={toggleStatMessage}/>Für weitere Details können einzelne Datenwerte ausgewählt werden.</p>
+                            :
+                                <div></div>
+                            }
                         </div>
                 }
             </div>
