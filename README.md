@@ -4,6 +4,6 @@ A React app with a focus on mobile use to store a current temperature value with
 
 https://heatdiary.schinaglp.com/
 
-<img src="./public/mockups/mockup_login.png" alt="Login Screen" width="33%"/>
-<img src="./public/mockups/mockup_home.png" alt="Homescreen" width="33%"/>
-<img src="./public/mockups/mockup_stats.png" alt="Stats Screen" width="33%"/>
+Login           |  Home          | Stats
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="./public/mockups/mockup_login.png" alt="Login Screen" width="300"/>  |  <img src="./public/mockups/mockup_home.png" alt="Homescreen" width="300"/> | <img src="./public/mockups/mockup_stats.png" alt="Stats Screen" width="300"/>
