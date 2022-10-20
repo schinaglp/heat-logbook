@@ -1,11 +1,17 @@
+@charset "UTF-8";
+
 @font-face {
-  font-family: "RobotoRegular";
-  src: url("../public/fonts/Roboto-Regular.ttf");
+  font-family: 'RobotoRegular';
+  src: url('../public/fonts/Roboto-Regular.eot?#iefix') format('embedded-opentype'), 
+       url('../public/fonts/Roboto-Regular.woff') format('woff'), 
+       url('../public/fonts/Roboto-Regular.ttf')  format('truetype');
 }
 
 @font-face {
-  font-family: "RobotoBold";
-  src: url("../public/fonts/Roboto-Bold.ttf");
+  font-family: 'RobotoBold';
+  src: url('../public/fonts/Roboto-Bold.eot?#iefix') format('embedded-opentype'), 
+       url('../public/fonts/Roboto-Bold.woff') format('woff'), 
+       url('../public/fonts/Roboto-Bold.ttf')  format('truetype');
 }
 
 * {
@@ -21,7 +27,7 @@ html {
 
 body {
   background: linear-gradient(180deg, rgba(43,83,83,1) 0%, rgba(236,134,86,1) 100%);
-  font-family: 'RobotoRegular';
+  font-family: 'RobotoRegular' !important;
   min-height: 100vh;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -68,7 +74,7 @@ body {
 
 .navbar-active {
   color: #3c7272;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
 }
 
 .navbar-stats {
@@ -87,12 +93,12 @@ body {
 }
 
 .header-name {
-  font-size: 9vw;
+  font-size: 8.5vw;
   padding: 0.3em;
   padding-bottom: 0.5em;
   display: block;
   margin: 0.3em 0em 0em 0.5em;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
 }
 
 .flexbox {
@@ -184,7 +190,7 @@ body {
 
 .add-btn {
   font-size: 9vw;
-  font-weight: 'RobotoBold';
+  font-weight: 'RobotoBold' !important;
   cursor: pointer;
   width: 1.1em;
   text-align: right;
@@ -195,7 +201,7 @@ body {
 .temp-container {
   margin: 0em 0em;
   padding: 0em 0.5em 0.5em 0.5em;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
   /* border-top: 2px solid #EC8656;
   border-bottom: 2px solid #EC8656; */
   /* background-color: rgba(211, 211, 211, 0.171); */
@@ -275,7 +281,7 @@ body {
   font-size: 4.5vw;
   margin-right: 0.7em;
   color: #e66e37d8;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
   text-align: right;
 }
 
@@ -316,7 +322,7 @@ body {
   border-radius: 0.2em;
   padding: 0.5em 1.2em;
   border: 0px;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
 }
 
 .submit-form {
@@ -326,7 +332,7 @@ body {
 .submit-btn {
   -webkit-appearance: none;
   font-size: 1em;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
   margin-bottom: 1.5em;
   margin-top: 0.5em;
   width: 100%;
@@ -364,7 +370,7 @@ body {
 
 .login-label {
   color: #3c7272;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
 }
 
 #login-email, #login-password, #login-password-rep {
@@ -378,7 +384,7 @@ body {
 
 .register-link-message {
   color: #3c7272;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
   margin-left: 2.7em;
   margin-bottom: 0.2em;
   font-size: 3.5vw;
@@ -475,7 +481,7 @@ body {
 
 .percentage {
   color: #2D5353;
-  font-family: 'RobotoBold';
+  font-family: 'RobotoBold' !important;
   /* margin-left: 0.5em; */
   font-size: 1.7em;
 }
